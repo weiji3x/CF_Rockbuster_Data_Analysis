@@ -1,4 +1,4 @@
-# SQL Queries to find top 5 customers from top 5 cities in the top 5 countries based on their spending.
+# SQL Queries to find top 5 customers from top 5 cities in the top 5 countries based on their spending
 SELECT			
 	A.customer_id,		
 	C.first_name,		

@@ -1,0 +1,43 @@
+# SQL Queries to find top 5 customers 
+SELECT			
+	A.customer_id,		
+	C.first_name,		
+	C.last_name,		
+	E.city,		
+	F.country,		
+	SUM(A.amount) AS Total_Amount		
+FROM payment A			
+INNER JOIN rental B ON A.rental_id = B.rental_id			
+INNER JOIN customer C ON B.customer_id = C.customer_id			
+INNER JOIN address D ON C.address_id = D.address_id			
+INNER JOIN city E ON D.city_id = E.city_id			
+INNER JOIN country F ON E.country_id = F.country_id			
+WHERE			
+	E.city IN(		
+	SELECT		
+		C.city	
+	FROM customer A		
+	INNER JOIN address B ON A.address_id = B.address_id		
+	INNER JOIN city C ON B.city_id = C.city_id		
+	INNER JOIN country D ON C.country_id = D.country_id		
+	WHERE		
+		D.country IN(	
+		SELECT	
+			D.country
+		FROM customer A	
+		INNER JOIN address B ON A.address_id = B.address_id	
+		INNER JOIN city C ON B.city_id = C.city_id	
+		INNER JOIN country D ON C.country_id = D.country_id	
+		GROUP BY country	
+		ORDER BY COUNT(A.customer_id) DESC	
+		LIMIT 10	
+		)	
+	)		
+GROUP BY			
+	A.customer_id,		
+	C.first_name,		
+	C.last_name,		
+	E.city,		
+	F.country		
+ORDER BY SUM(A.amount) DESC			
+LIMIT 5			
